@@ -42,26 +42,38 @@ message(STATUS "Using ROOT ${ROOT_VERSION} from ${ROOT_DIR}")
 # ---- Rest of the project as before ----
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 endif()
 
+# set(ROOT_LIBS
+#   ROOT::Core ROOT::RIO ROOT::Tree ROOT::TreePlayer
+#   ROOT::Hist ROOT::Gpad ROOT::Graf ROOT::Graf3d ROOT::MathCore ROOT::Imt)
 set(ROOT_LIBS
   ROOT::Core ROOT::RIO ROOT::Tree ROOT::TreePlayer
-  ROOT::Hist ROOT::Gpad ROOT::Graf ROOT::Graf3d ROOT::MathCore ROOT::Imt)
-
+  ROOT::Hist ROOT::Gpad ROOT::Graf ROOT::Graf3d ROOT::MathCore ROOT::Imt
+  ROOT::Geom)
 # everything except main.cpp goes into a library
+# file(GLOB LIB_SOURCES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/src/*.cpp)
+# list(FILTER LIB_SOURCES EXCLUDE REGEX ".*/main\\.cpp$")
+
 file(GLOB LIB_SOURCES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/src/*.cpp)
-list(FILTER LIB_SOURCES EXCLUDE REGEX ".*/main\\.cpp$")
+list(FILTER LIB_SOURCES EXCLUDE REGEX ".*/(main|export_event)\\.cpp$")
 
 add_library(trackcore STATIC ${LIB_SOURCES})
 target_include_directories(trackcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(trackcore PUBLIC ${ROOT_LIBS})
+target_compile_options(trackcore PRIVATE -Wall -Wextra -Wpedantic)
 
+# ---- Executables 
 add_executable(TrackAnalysis src/main.cpp)
 target_link_libraries(TrackAnalysis PRIVATE trackcore)
 
-# ---- tests ----
+add_executable(export_event src/export_event.cpp)
+target_link_libraries(export_event PRIVATE trackcore ${ROOT_LIBS})
+
+# ---- Tests ----
 include(CTest)
 if(BUILD_TESTING)
   add_executable(analyze_tests tests/test_analyze.cpp)
