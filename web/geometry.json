@@ -1,0 +1,249 @@
+[
+  {
+    "id": 0,
+    "origin": 550,
+    "target": null,
+    "modules": [
+      {
+        "index": 0,
+        "projection": "x",
+        "angle": 0,
+        "tilt": 13.35,
+        "z": 566.6227,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      },
+      {
+        "index": 1,
+        "projection": "y",
+        "angle": 90,
+        "tilt": 13.35,
+        "z": 570.4722,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      },
+      {
+        "index": 2,
+        "projection": "u",
+        "angle": 135,
+        "tilt": 0.0,
+        "z": 603.8635,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0026
+      },
+      {
+        "index": 3,
+        "projection": "v",
+        "angle": 45,
+        "tilt": 0.0,
+        "z": 605.0965,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0026
+      },
+      {
+        "index": 4,
+        "projection": "x",
+        "angle": 0,
+        "tilt": 13.35,
+        "z": 638.5227,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      },
+      {
+        "index": 5,
+        "projection": "y",
+        "angle": 90,
+        "tilt": 13.35,
+        "z": 642.3722,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "origin": 667.3,
+    "target": {
+      "z": 664.5999999999999,
+      "width": 9,
+      "height": 9,
+      "thickness": 2
+    },
+    "modules": [
+      {
+        "index": 0,
+        "projection": "x",
+        "angle": 0,
+        "tilt": 13.35,
+        "z": 683.9227,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      },
+      {
+        "index": 1,
+        "projection": "y",
+        "angle": 90,
+        "tilt": 13.35,
+        "z": 687.7722,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      },
+      {
+        "index": 2,
+        "projection": "u",
+        "angle": 135,
+        "tilt": 0.0,
+        "z": 721.1635,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0026
+      },
+      {
+        "index": 3,
+        "projection": "v",
+        "angle": 45,
+        "tilt": 0.0,
+        "z": 722.3965,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0026
+      },
+      {
+        "index": 4,
+        "projection": "x",
+        "angle": 0,
+        "tilt": 13.35,
+        "z": 755.8226999999999,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      },
+      {
+        "index": 5,
+        "projection": "y",
+        "angle": 90,
+        "tilt": 13.35,
+        "z": 759.6722,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "origin": 784.6,
+    "target": {
+      "z": 780.7,
+      "width": 20,
+      "height": 9,
+      "thickness": 5
+    },
+    "modules": [
+      {
+        "index": 0,
+        "projection": "x",
+        "angle": 0,
+        "tilt": 13.35,
+        "z": 801.2227,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 15,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      },
+      {
+        "index": 1,
+        "projection": "y",
+        "angle": 90,
+        "tilt": 13.35,
+        "z": 805.0722000000001,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      },
+      {
+        "index": 2,
+        "projection": "u",
+        "angle": 135,
+        "tilt": 0.0,
+        "z": 838.4635000000001,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0026
+      },
+      {
+        "index": 3,
+        "projection": "v",
+        "angle": 45,
+        "tilt": 0.0,
+        "z": 839.6965,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0026
+      },
+      {
+        "index": 4,
+        "projection": "x",
+        "angle": 0,
+        "tilt": 13.35,
+        "z": 873.1227,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      },
+      {
+        "index": 5,
+        "projection": "y",
+        "angle": 90,
+        "tilt": 13.35,
+        "z": 876.9722,
+        "sizeMeasurement": 9.144,
+        "sizeAlongStrips": 9.144,
+        "thickness": 0.032,
+        "sensorDistance": 0.18,
+        "hitResolution": 0.0012
+      }
+    ]
+  }
+]
