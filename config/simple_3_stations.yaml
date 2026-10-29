@@ -1,0 +1,281 @@
+---
+
+# Prosta konfiguracja detektora (sama geometria + default dla innych opcji) z trzema stacjami trackera i bez kalorymetru 
+
+
+
+# Na początku mamy część, która definiuje trochę wspólnych informacji dla każdego elementu detektora, żeby nie musieć tego robić później przy każdym z nich
+# Normalnie byłoby tu jeszcze dużo więcej rzeczy, ale dla nas są nieistotne :)
+
+# Domyślna konfiguracja modułów, może być później nadpisana dla dowolnego modułu tymi samymi nazwami
+modulesConfiguration:
+
+  # część z geometrią
+  geometry:
+
+    sensorMaterial: silicon # materiał z którego są bloczki reprezentujące sensor (materiały są zdefiniowane w geometry/media.geo)
+    sensorSizeMeasurementDirection: 9.144 # w cm; rozmiar sensora w kierunku pomiaru, czyli prostopadle do pasków (musimy mieć taki podział, bo mogą być obrócone i mierzyć w różnych kierunkach)
+    sensorSizePerpendicularDirection: 9.144 # w cm; rozmiar sensora w kierunku wzdłuż pasków
+    sensorThickness: 0.032 # w cm; grubość sensora
+    distanceBetweenSensorCenters: 0.18 # w cm; odległość między środkami sensorów w module (w tej konfiguracji każdy moduł ma 2 sensory)
+    numberOfStrips: 1016 # ilość pasków w każdym sensorze (nie używamy tego przy tworzeniu geometrii, dopiero przy digitizacji rzutujemy rozkład ładunku na powierzchni sensora na paski i sprawdzamy, które są aktywne)
+
+##############################################################################
+  # ten kawałek nas nie dotyczy, ale na razie musi się tu znaleźć :)
+  digitization:
+
+    driftDirectionUpstream: -1
+    driftDirectionDownstream: 1
+ 
+    sigma0: 0.00037
+    sigmaCoefficient: 1.80
+    readoutNoise: 1000
+    stripThreshold: 9000
+    halfChannelStripOrder: 1
+    maxClusterWidth: 4
+    ptWidth: 7
+    windowOffset: 0
+    seedSensor: 0
+    enableLUT: false
+    LUTmap:
+      - {binaryBendCode: 0x7, bendInStripUnits: -7  }
+      - {binaryBendCode: 0x7, bendInStripUnits: -6.5}
+      - {binaryBendCode: 0x7, bendInStripUnits: -6  }
+      - {binaryBendCode: 0x7, bendInStripUnits: -5.5}
+      - {binaryBendCode: 0x7, bendInStripUnits: -5  }
+      - {binaryBendCode: 0x6, bendInStripUnits: -4.5}
+      - {binaryBendCode: 0x5, bendInStripUnits: -4  }
+      - {binaryBendCode: 0x4, bendInStripUnits: -3.5}
+      - {binaryBendCode: 0x3, bendInStripUnits: -3  }
+      - {binaryBendCode: 0x2, bendInStripUnits: -2.5}
+      - {binaryBendCode: 0x1, bendInStripUnits: -2  }
+      - {binaryBendCode: 0x0, bendInStripUnits: -1.5}
+      - {binaryBendCode: 0x9, bendInStripUnits: -1  }
+      - {binaryBendCode: 0xA, bendInStripUnits: -0.5}
+      - {binaryBendCode: 0xB, bendInStripUnits:  0  }
+      - {binaryBendCode: 0xC, bendInStripUnits:  0.5}
+      - {binaryBendCode: 0xD, bendInStripUnits:  1  }
+      - {binaryBendCode: 0xE, bendInStripUnits:  1.5}
+      - {binaryBendCode: 0xF, bendInStripUnits:  2  }
+      - {binaryBendCode: 0xF, bendInStripUnits:  2.5}
+      - {binaryBendCode: 0xF, bendInStripUnits:  3  }
+      - {binaryBendCode: 0xF, bendInStripUnits:  3.5}
+      - {binaryBendCode: 0xF, bendInStripUnits:  4  }
+      - {binaryBendCode: 0xF, bendInStripUnits:  4.5}
+      - {binaryBendCode: 0xF, bendInStripUnits:  5  }
+      - {binaryBendCode: 0xF, bendInStripUnits:  5.5}
+      - {binaryBendCode: 0xF, bendInStripUnits:  6  }
+      - {binaryBendCode: 0xF, bendInStripUnits:  6.5}
+      - {binaryBendCode: 0xF, bendInStripUnits:  7  }
+#############################################################################
+
+
+# Domyślna geometria celów
+targetsConfiguration:
+
+  targetMaterial: GraphiteR4550 # materiał bloczków celów
+  width: 9 # w cm; szerokość (oś X; tutaj wystarcza nam szerokość i wysokość, bo obracanie celów nie ma sensu, a nawet gdyby w rzeczywistym detektorze był trochę obrócony to nie jesteśmy na to czuli)
+  height: 9 # w cm; wysokość (oś Y)
+  thickness: 2 # w cm; grubość (oś Z / wiązki)
+
+
+# Konfiguracja kalorymetru (na razie jest wyłączony)
+calorimeterConfiguration:
+
+  geometry:
+
+    crystalMaterial: PbWO4
+
+    crystalWidthUpstream: 2.854   # są dwa rozmiary, bo kryształy się rozszerzają z tyłu; upstream - od strony wiązki; downstream - od strony końca detektora
+    crystalHeightUpstream: 2.854
+
+    crystalWidthDownstream: 2.992
+    crystalHeightDownstream: 2.992
+
+    crystalThickness: 22
+
+    numberOfColumns: 5
+    numberOfRows: 5
+
+    distanceBetweenCrystalCenters: 2.963
+    
+
+    ##############################################################
+    ### tym się na razie nie będziemy przejmować, dopiero gdybyśmy brali geometrię bezpośrednio z symulacji
+    plateMaterial: Aluminum
+    plateWidth: 21
+    plateHeight: 21
+    plateThickness: 1
+    
+    pP1Material: CarbonFiber # Perpendicular Plate 1 (hP1)
+    pP1Width: 14.86
+    pP1Height: 0.04
+    pP1Thickness: 22
+    
+    pP2Material: CarbonFiber # Perpendicular Plate 2 (hP2)
+    pP2Width: 15.14
+    pP2Height: 0.02
+    pP2Thickness: 22
+    
+    numberOfPP1: 4 
+    numberOfPP2: 4 
+    
+    oBPMaterial: Aluminum #Outer Box Plate (oBP)
+    oBPWidth: 21 
+    oBPHeight: 1
+    oBPThickness: 48.50
+    oBPDistance: 11
+    
+    mBPMaterial: Aluminum #middle Box Plate (mBP)
+    mBPWidth: 19.5
+    mBPHeight: 1.5
+    mBPThickness: 23.3
+    
+    iBPMaterial: Aluminum #inner Box Plate (iBP)
+    iBPWidth: 17.5
+    iBP12Height: 1.5
+    iBP34Height: 1.3
+    iBPThickness: 23.3
+    
+    fBMaterial: Foam # foam Box
+    fB1Width: 12
+    fB1Height: 47
+    fBThickness: 72.5
+    
+    fB2Width: 23
+    fB2Height: 12
+    
+    sPMaterial: Aluminum #Shell plating 
+    sPThickness: 0.15 
+    iSPWidth: 47 # In Beamline plate dimensions are square
+    
+    sSPWidth: 72.5
+    sSPHeight: 47  
+
+
+############################################################################
+# to też nas nie dotyczy, ale musi tu być
+  digitization:
+
+    baselineNoise: [[3.51046, 3.64642, 3.23283, 3.67022, 4.04895],
+                    [3.25993, 3.07851, 3.64882, 3.54215, 3.13898],
+                    [3.33528, 3.28898, 3.79472, 3.68700, 3.71632],
+                    [2.90340, 3.08510, 3.97006, 3.63701, 3.97955],
+                    [3.15612, 3.56306, 3.27315, 3.89946, 3.82752]]
+    
+    pePerGeV: [[2940, 2670, 2350, 3270, 3490],
+               [2580, 3120, 3330, 2890, 2460],
+               [3050, 2740, 3300, 2310, 3460],
+               [2930, 2780, 2390, 3500, 2830],
+               [3490, 2620, 2970, 3220, 3180]]
+
+    adcPerPE: [[0.028575, 0.031464, 0.035749, 0.025691, 0.024072],
+               [0.032562, 0.026926, 0.025228, 0.029069, 0.034150],
+               [0.027544, 0.030661, 0.025458, 0.036368, 0.024280],
+               [0.028672, 0.030219, 0.035151, 0.024003, 0.029686],
+               [0.024072, 0.032065, 0.028286, 0.026090, 0.026418]]
+
+    excessNoiseFactor: [[2.0, 2.0, 2.0, 2.0, 2.0], # not yet tuned per crystal
+                        [2.0, 2.0, 2.0, 2.0, 2.0],
+                        [2.0, 2.0, 2.0, 2.0, 2.0],
+                        [2.0, 2.0, 2.0, 2.0, 2.0],
+                        [2.0, 2.0, 2.0, 2.0, 2.0]]
+
+    pedestal:  [[20000.0, 20000.0, 20000.0, 20000.0, 20000.0], # not yet tuned per crystal
+                [20000.0, 20000.0, 20000.0, 20000.0, 20000.0],
+                [20000.0, 20000.0, 20000.0, 20000.0, 20000.0],
+                [20000.0, 20000.0, 20000.0, 20000.0, 20000.0],
+                [20000.0, 20000.0, 20000.0, 20000.0, 20000.0]]
+  
+    waveformTStart: 1 
+    waveformTEnd: 12
+    waveformLength: 10  # need to be <= (waveformTEnd - waveformTStart)
+###########################################################################
+
+
+# Tutaj zaczyna się już opis samego detektora
+
+
+detector:
+
+
+  # Ten kawałek dotyczy modułów z sensorami, bo mogą mierzyć pozycję w różnych kierunkach (używami pasków krzemowych, a nie pikseli, więc mamy tylko jednowymiarowy pomiar pozycji).
+  # W detektorze mamy moduły, które nazywamy X, Y, U i V (te dwa ostatnie, U i V, nazywamy też modułami stereo). X i Y są ustawione tak, żeby mierzyły pozycję wzdłuż osi X i Y detektora,
+  # a my używamy tych pozycji, żeby zrekonstruować ślady 2D - czyli osobno w płaszczyźnie XZ i osobno w YZ, gdzie Z to kierunek wzdłuż wiązki.
+  # Oprócz tego mamy też moduły U i V, które tak jak X i Y są ustawione względem siebie w prostopadłych kierunkach, ale jako całość są obrócone o 45 stopni względem modułów XY.
+  # Dzięki temu możemy sprawdzić wszystkie kombinacje zrekonstruowanych śladów 2D i wybrać tylko te, które są też kompatybilne z punktami w modułach UV, czyli mogą rzeczywiście odpowiadać cząstce, która przeszła przez detektor.
+  # Innymi słowy, przez to, że mamy dwa dodatkowe moduły, które są obrócone o 45 stopni, wprowadzamy sobie korelację między płaszczyznami XZ i YZ.
+
+  # To jest trochę pozostałość po początkach, bo w założeniu (zanim sam zrozumiałem o co chodzi :D) tych "projekcji" (kierunków pomiaru) miała być dowolna ilość.
+  # Teraz większość informacji (tzn. ich ilość i kierunek pomiaru), są zafiksowane na sztywno - cztery kierunki i kąty o jakie są obrócone względem osi X - (x,y,u,v) = (0, 90, 135, 45).
+  # Została tylko jedna zmienna, która nie jest w pełni określona - nachylenie modułów względem osi wiązki (które nazywamy tilt). 
+  # Tzn. ta wartość, 13.35 stopnia, jest optymalna i daje największy zysk rozdzielczości, ale nie ma jeszcze ostatecznej decyzji czy będziemy w ogóle używać nachylenia czy nie (bo jest problematyczne, np. dla alignmentu detektora).
+
+  projections: 
+    
+    x:
+      tilt: 13.35 
+
+    y: 
+      tilt: 13.35
+
+    u:
+      tilt: 0.
+
+    v:
+      tilt: 0.
+
+
+  # Tutaj zaczyna się definicja konfiguracji detektora, tzn. z ilu stacji (target + moduły trackera) się składa i ile modułów jest w każdej stacji.
+  # Normalnie moglibyśmy tu mieć jeszcze tzw. BMS, który symuluje kształtowanie wiązki zanim wejdzie w detektor, kalorymetr mierzący energię i stacje mionowe, które wykrywają miony po przeleceniu przez detektor.
+  # My się na razie ograniczymy tylko do targetów i modułów, bo tyle wystarcza, żeby zrekonstruować przypadek. 
+
+
+  stations:
+
+
+    - # StationId = 0, stacje są numerowane od 0 i później w pliku wynikowym to ID jest używane
+      origin: 550  # To jest bezwzględna pozycja stacji wzdłuż osi wiązki, czyli tutaj z = 550 cm (żeby nie musieć ustawiać dla każdej stacji innych pozycji modułów)
+      #targetRelativePosition: 0 # Pierwsza stacja jest bez targetu (jak ta opcja jest wykomentowana, to się nie pojawi w geometrii)
+
+      modules: # lista modułów w tej stacji, te trzy wartości muszą być zawsze określone; środek każdego modułu i celu jest w punkcie (x, y) = (0, 0)
+        - {projection: x, relativePosition: 16.6227, hitResolution: 0.0012} # pozycja jest względem origin, czyli ten moduł jest na z = 566.6227 cm, rozdzielczość to jest dokładność pomiaru pozycji przez moduł, która jest używana w ficie śladu do punktów
+        - {projection: y, relativePosition: 20.4722, hitResolution: 0.0012} # x i y mają lepszą rozdzielczość właśnie przez tilt, tzn. nachylenie do osi Z
+
+        - {projection: u, relativePosition: 53.8635, hitResolution: 0.0026}
+        - {projection: v, relativePosition: 55.0965, hitResolution: 0.0026}
+
+        - {projection: x, relativePosition: 88.5227, hitResolution: 0.0012}
+        - {projection: y, relativePosition: 92.3722, hitResolution: 0.0012}
+
+    - # StationId = 1, tu się zaczyna druga stacja
+      origin: 667.3  
+      targetRelativePosition: -2.7 # tym razem z targetem, pozycja jest względem origin
+      modules:
+        - {projection: x, relativePosition: 16.6227, hitResolution: 0.0012}
+        - {projection: y, relativePosition: 20.4722, hitResolution: 0.0012}
+  
+        - {projection: u, relativePosition: 53.8635, hitResolution: 0.0026}
+        - {projection: v, relativePosition: 55.0965, hitResolution: 0.0026}
+
+        - {projection: x, relativePosition: 88.5227, hitResolution: 0.0012}
+        - {projection: y, relativePosition: 92.3722, hitResolution: 0.0012}
+
+    - # StationId = 2, trzecia stacja - tu, dla przykładu, nadpiszemy rozmiary targetu i jednego modułu
+      origin: 784.6  
+      targetRelativePosition: -3.9
+      targetConfiguration:  # tu jest potrzebna osobna sekcja, bo normalnie podajemy tylko pozycję
+        - width: 20         # nadpisywanie używa tych samych nazw zmiennych co ogólne sekcje na początku
+        - thickness: 5
+
+      modules:
+        - {projection: x, relativePosition: 16.6227, hitResolution: 0.0012, sensorSizePerpendicularDirection: 15} # tutaj nadpisanie jest wciągnięte w konfigurację modułu
+        - {projection: y, relativePosition: 20.4722, hitResolution: 0.0012}
+  
+        - {projection: u, relativePosition: 53.8635, hitResolution: 0.0026}
+        - {projection: v, relativePosition: 55.0965, hitResolution: 0.0026}
+
+        - {projection: x, relativePosition: 88.5227, hitResolution: 0.0012}
+        - {projection: y, relativePosition: 92.3722, hitResolution: 0.0012}
+
+

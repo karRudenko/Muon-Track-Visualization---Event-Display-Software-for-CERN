@@ -1,0 +1,82 @@
+
+# uruchomienie - root -l -q 'runProductionJob("simple_signal_job")'
+
+
+
+outputFile: simple_output.root # nazwa wyprodukowanego pliku
+saveParametersFile: false # tego używał stary event display, więc może da się z niego wyciągnąć geometrię; pomyślimy :)
+saveGeoTracks: false # z tego być może da się wyciągnąć rzeczywiste trajektorie cząstek
+numberOfEvents: 100000 # ilość wygenerowanych przypadków
+detectorConfiguration: simple_3_stations # nazwa pliku z konfiguracją detektora - szuka go najpierw w miejscu gdzie uruchamiamy macro, a później w /common/geometry
+
+
+runGeneration: true # uruchamiamy etap generacji przypadków (alternatywnie moglibyśmy wczytywać je z pliku dla kolejnych etapów)
+generationConfiguration:
+
+  geantConfiguration: geant4DefaultConfiguration # plik z konfiguracją Geant4 (symulacja przejścia cząstek przez materię)
+
+  saveTrackerPoints: false # kontener z punktami z Geant4 (linkowanie do objętości detektora + pozycja wejścia i wyjścia z niej + zdeponowany ładunek + informacje o tym, które wygenerowane cząstki go zostawiły)
+  saveCalorimeterPoints: false # j.w. ale dla kalorymetru
+  saveMCTracks: false # kontener, który zawiera ślady wszystkich wygenerowanych cząstek w przypadku
+  saveSignalTracks: false # kontener, który zawiera tylko ślady cząstek dodanych ręcznie, jeszcze przed symulacją (czyli mion wejściowy + mion i elektron wychodzące, wygenerowane przez Mesmera)
+  savePileupTracks: false # kontener, który zawiera wszystkie ślady mionów wiązki w przypadku (może być więcej niż 1, jeśli pileup jest włączony - częstość odczytu detektora nie jest zsynchronizowana z częstością pojawiania się mionów w wiązce)
+  saveTrackerTracks: true # kontener, który zawiera tylko ślady, które zostały wygenerowane przed kalorymetrem (bo tam jest ich bardzo dużo, z kaskad elektromagnetycznych)
+  pileupMean: 0 # decyduje ile mionów wiązki przypada na jeden przypadek (wartość to parametr brany do rozkładu Poissona, z którego jest losowana liczba dla każdego przypadku)
+
+
+  beamGenerator: ParticleGunBeamProfile # generujemy miony wiązki na podstawie pliku z histogramem rzeczywistych rozkładów, które dostajemy od operatorów z CERN
+  beamGeneratorConfiguration:
+    pdg: -13              # generujemy miony z dodatnim ładunkiem (https://pdg.lbl.gov/2021/reviews/rpp2020-rev-monte-carlo-numbering.pdf)
+    mass: 0.1056583715    # część stałych musi być podana, bo profil nie zakłada jaka to cząstka (w szczególnych przypadkach, możemy używać też pionów)
+    beamProfile: beamProfile_narrow # plik z histogramem z common/beamProfiles
+
+
+  forceInteraction: true # wymuszamy wygenerowanie wierzchołka u + e -> u + e w każdym przypadku, gdzie wiązka trafi w wybrany cel
+  vertexStationIndex: 1 # generujemy wierzchołki w pierwszej stacji, czyli pierwszym targecie jaki się pojawia w detektorze (stacja 0 jest bez targetu)
+  vertexGenerator: Mesmer # to jest nasz standardowy generator do sygnału
+  vertexGeneratorConfiguration:
+    mode: weighed    # normalnie przypadki się waży, żeby generować więcej w interesującym nas zakresie kinematycznym, a stłumić te obszary gdzie jest ich dużo, ale np. nie jesteśmy w stanie ich zrekonstruować
+    ord: born          # poziom dokładności użytych obliczeń - ten jest najniższy :), tzn. Leading Order (LO), ale dzięki temu będziemy mieć dużo "ładnych" przypadków sygnału
+    nwarmup: 10000      # ilość iteracji przy inicjalizacji generatora
+    Qmu: +1             # ładunek mionu z wiązki
+    Eemin: 0.2          # dolne ograniczenie na energię elektronu, żeby nie produkować przypadków z ogona rozkładu (który jest dla nas nieistotny)
+
+
+
+
+runDigitization: true # uruchamiamy etap, który zamienia ładunki przypisane do objętości detektora na aktywność pasków (binarną - powyżej thresholdu albo nie) i tworzy tzw. stuby, zawierające informację z obu sensorów modułu
+digitizationConfiguration:
+
+  tracker:
+    saveStripDigis: false # kontener aktywnych pasków
+    saveStubs: true # kontener stubów (pozycja w pierwszym sensorze + przesunięcie między pozycją w pierwszym i drugim sensorze), który jest inputem do rekonstrukcji
+
+  calorimeter:
+    saveDeposit: false # informacje o energii zdeponowanej w kryształach kalorymetru
+
+
+
+runDataPreprocessor: true # dodatkowy etap, który unifikuje dane wejściowe z różnych źródeł do jednego formatu, który wchodzi do rekonstrukcji
+dataPreprocessorConfiguration:
+  dataFormat: MC                   
+  saveRawDataEvent: false # zapisywanie ma znaczenie tylko, gdybyśmy musieli zacząć ponownie od tego etapu; jeśli robimy wszystko jednym ciągiem, to dane są przekazywane między etapami przez RAM
+
+
+
+runReconstruction: true # uruchamia rekonstrukcje, która na podstawie stubów tworzy najpierw ślady 2D, później 3D, a w końcu wierzchołki interakcji
+reconstructionConfiguration:
+
+
+  general:
+    outputFormat: full # zapisujemy wszystko (mamy jeszcze mniejsze formaty, które oszczędzają dysk i czas przy dużych produkcjach)
+
+  tracking:
+    maxNumberOfSharedHits: 0 # dla zachowania wydajności, dopuszczamy sytuacje gdzie dwa ślady mają przypisany ten sam stub, ale na razie nie będziemy sobie komplikować sytuacji :)
+
+  # resztę opcji zostawiamy domyślną
+
+
+runEventFilter: false # wyłączamy automatyczne filtrowanie przypadków zapisywanych do pliku wyjściowego
+#eventFilterConfiguration:
+  
+
