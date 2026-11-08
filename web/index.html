@@ -1,36 +1,47 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MUonE Event Display</title>
-<style>
-  html, body { margin: 0; height: 100%; background: #0d1117; color: #c9d1d9;
-               font: 13px/1.4 system-ui, -apple-system, sans-serif; overflow: hidden; }
-  #panel { position: absolute; top: 10px; left: 10px; width: 270px; padding: 10px 12px;
-           background: rgba(22, 27, 34, .9); border: 1px solid #30363d; border-radius: 8px; }
-  #panel h1 { font-size: 14px; margin: 0 0 8px; }
-  #panel label { display: block; margin: 3px 0; }
-  #panel input[type=range] { width: 100%; }
-  #info { margin-top: 8px; padding-top: 8px; border-top: 1px solid #30363d; white-space: pre-wrap; }
-  #legend span { display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 8px; border-radius: 2px; }
-  .err { color: #ff7b72; }
-</style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div id="panel">
-  <h1>MUonE Event Display</h1>
-  <label>Событие (JSON): <input type="file" id="file" accept=".json"></label>
-  <label>Сжатие по z: <span id="zval"></span>
-    <input type="range" id="zscale" min="0.02" max="1" step="0.01" value="0.1"></label>
-  <label><input type="checkbox" id="showGeo" checked> детектор</label>
-  <label><input type="checkbox" id="showHits" checked> хиты (полоски)</label>
-  <label><input type="checkbox" id="showTracks" checked> треки</label>
-  <label><input type="checkbox" id="showVertices" checked> вершины</label>
-  <div id="legend">
-    <span style="background:#58a6ff"></span>x<span style="background:#3fb950"></span>y<span style="background:#d29922"></span>u<span style="background:#bc8cff"></span>v
-  </div>
-  <div id="info">загрузка…</div>
+  <details open>
+  <summary>MUonE Event Display</summary>
+  <p id="source" class="muted"></p>
+
+  <section>
+    <h2>Event</h2>
+    <div class="row">
+      <button id="prev" title="Previous event (←)">◀</button>
+      <input type="number" id="eventNumber" min="0" step="1" list="eventIds" placeholder="number" aria-label="Event number">
+      <button id="go" title="Show this event (Enter)">Go</button>
+      <button id="next" title="Next event (→)">▶</button>
+    </div>
+    <datalist id="eventIds"></datalist>
+    <button id="random" class="wide" title="Random event (R)">Random event</button>
+    <!-- <label class="file">Or open a JSON file: <input type="file" id="file" accept=".json"></label> -->
+  </section>
+
+  <section>
+    <h2>View</h2>
+    <label>z compression: <span id="zval"></span>
+      <input type="range" id="zscale" min="0.02" max="1" step="0.01" value="0.1"></label>
+    <label><input type="checkbox" data-layer="geometry" checked> detector</label>
+    <label><input type="checkbox" data-layer="hits" checked> hits (strips)</label>
+    <label><input type="checkbox" data-layer="tracks" checked> tracks</label>
+    <label><input type="checkbox" data-layer="vertices" checked> vertices</label>
+    <div id="legend">
+      <span class="sw" style="background:#58a6ff"></span>x
+      <span class="sw" style="background:#3fb950"></span>y
+      <span class="sw" style="background:#d29922"></span>u
+      <span class="sw" style="background:#bc8cff"></span>v
+    </div>
+  </section>
+  </details>
+  <div id="info">loading…</div>
 </div>
 
 <script type="importmap">
@@ -38,153 +49,6 @@
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
 </script>
-<script type="module">
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-
-const COLORS = { x: 0x58a6ff, y: 0x3fb950, u: 0xd29922, v: 0xbc8cff };
-const DEG = Math.PI / 180;
-const params = new URLSearchParams(location.search);
-const eventFile = params.get("event") || "event_5.json";
-
-// ---------- сцена ----------
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 5000);
-camera.position.set(30, 18, 40);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(devicePixelRatio);
-renderer.setSize(innerWidth, innerHeight);
-document.body.appendChild(renderer.domElement);
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-
-// Всё содержимое лежит в группе world: она сжимается по z, т.к. детектор ~330 см длиной при ~9 см в поперечнике.
-const world = new THREE.Group();
-scene.add(world);
-const layer = { geo: new THREE.Group(), hits: new THREE.Group(), tracks: new THREE.Group(), vertices: new THREE.Group() };
-Object.values(layer).forEach(g => world.add(g));
-let zMid = 0;
-
-function applyZScale() {
-  const s = +document.getElementById("zscale").value;
-  document.getElementById("zval").textContent = "×" + s.toFixed(2);
-  world.scale.z = s;
-  world.position.z = -zMid * s;
-}
-
-// ---------- помощники ----------
-const clear = g => { while (g.children.length) { const o = g.children.pop(); o.geometry?.dispose(); o.material?.dispose(); } };
-function tube(a, b, radius, color) {
-  const geom = new THREE.TubeGeometry(new THREE.LineCurve3(a, b), 1, radius, 8, false);
-  return new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color }));
-}
-
-// ---------- детектор из geometry.json ----------
-function drawGeometry(geometry) {
-  clear(layer.geo);
-  let zLo = Infinity, zHi = -Infinity;
-  for (const st of geometry) {
-    for (const m of st.modules) {
-      zLo = Math.min(zLo, m.z); zHi = Math.max(zHi, m.z);
-      const color = COLORS[m.projection];
-      // локальная система модуля: x — направление измерения, y — вдоль полосок, z — вдоль пучка
-      const grp = new THREE.Group();
-      grp.position.z = m.z;
-      grp.rotation.z = m.angle * DEG;
-      const box = new THREE.BoxGeometry(m.sizeMeasurement, m.sizeAlongStrips, 0.4);
-      const body = new THREE.Mesh(box, new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.10, depthWrite: false }));
-      const edges = new THREE.LineSegments(new THREE.EdgesGeometry(box), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.55 }));
-      // наклон (tilt) — поворот вокруг оси полосок; знак подтверждён по данным: z_хита = z_модуля − pos·sin(tilt)
-      body.rotation.y = edges.rotation.y = m.tilt * DEG;
-      grp.add(body, edges);
-      layer.geo.add(grp);
-    }
-    if (st.target) {
-      zLo = Math.min(zLo, st.target.z); zHi = Math.max(zHi, st.target.z);
-      const t = new THREE.Mesh(
-        new THREE.BoxGeometry(st.target.width, st.target.height, st.target.thickness),
-        new THREE.MeshBasicMaterial({ color: 0xff8c1a, transparent: true, opacity: 0.35, depthWrite: false }));
-      t.position.z = st.target.z;
-      layer.geo.add(t);
-    }
-  }
-  zMid = (zLo + zHi) / 2;
-  applyZScale();
-}
-
-// ---------- событие из JSON ----------
-function drawEvent(ev, geometry) {
-  clear(layer.hits); clear(layer.tracks); clear(layer.vertices);
-
-  // каждый хит — ОДНО измерение (полоска): линия поперёк направления измерения на z хита
-  let skipped = 0;
-  for (const h of ev.hits) {
-    const m = geometry[h.station]?.modules[h.module];
-    if (!m) { skipped++; continue; }
-    const phi = m.angle * DEG, half = m.sizeAlongStrips / 2, c = h.coord;
-    const mx = Math.cos(phi), my = Math.sin(phi), sx = -Math.sin(phi), sy = Math.cos(phi);
-    layer.hits.add(tube(
-      new THREE.Vector3(c * mx - half * sx, c * my - half * sy, h.z),
-      new THREE.Vector3(c * mx + half * sx, c * my + half * sy, h.z),
-      0.04, COLORS[m.projection]));
-  }
-
-  for (const t of ev.tracks)
-    layer.tracks.add(tube(new THREE.Vector3(...t.p1), new THREE.Vector3(...t.p2), 0.05, 0xffd33d));
-
-  for (const v of ev.vertices) {
-    const s = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 12), new THREE.MeshBasicMaterial({ color: 0xff4d4d }));
-    s.position.set(...v.pos);
-    layer.vertices.add(s);
-  }
-
-  const lines = [`событие ${ev.event}`,
-    `хитов: ${ev.hits.length}   треков: ${ev.tracks.length}   вершин: ${ev.vertices.length}`];
-  ev.vertices.forEach((v, i) => lines.push(
-    `вершина ${i}: z=${v.pos[2].toFixed(1)} см, θμ=${(v.muonTheta * 1e3).toFixed(3)} мрад, θe=${(v.electronTheta * 1e3).toFixed(2)} мрад`));
-  if (skipped) lines.push(`⚠ хитов вне геометрии: ${skipped}`);
-  setInfo(lines.join("\n"));
-}
-
-function setInfo(text, isError = false) {
-  const el = document.getElementById("info");
-  el.textContent = text;
-  el.className = isError ? "err" : "";
-}
-
-// ---------- загрузка ----------
-let geometry = null;
-async function fetchJson(url) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
-  return r.json();
-}
-async function init() {
-  try {
-    geometry = await fetchJson("geometry.json");
-    drawGeometry(geometry);
-    drawEvent(await fetchJson(eventFile), geometry);
-  } catch (e) {
-    setInfo(`Не удалось загрузить данные:\n${e.message}\n\nЗапустите страницу через сервер:\n  cd web && python3 -m http.server 8000\nи откройте http://localhost:8000`, true);
-  }
-}
-document.getElementById("file").addEventListener("change", async e => {
-  const f = e.target.files[0];
-  if (f && geometry) drawEvent(JSON.parse(await f.text()), geometry);
-});
-
-// ---------- управление ----------
-document.getElementById("zscale").addEventListener("input", applyZScale);
-for (const [id, key] of [["showGeo", "geo"], ["showHits", "hits"], ["showTracks", "tracks"], ["showVertices", "vertices"]])
-  document.getElementById(id).addEventListener("change", e => { layer[key].visible = e.target.checked; });
-addEventListener("resize", () => {
-  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-});
-
-applyZScale();
-init();
-(function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
-</script>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>

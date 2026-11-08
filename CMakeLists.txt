@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(TrackAnalysis LANGUAGES CXX)
+project(MuoneEventDisplay LANGUAGES CXX)
 
 # ---- Locate ROOT automatically (no user variables needed) ----
 set(_root_hints "")
@@ -24,7 +24,7 @@ endforeach()
 list(APPEND _root_hints /usr /usr/local /opt/root /opt/homebrew /snap/root-framework/current)
 
 find_package(ROOT CONFIG QUIET
-  COMPONENTS Core RIO Tree TreePlayer Hist Gpad Graf Graf3d MathCore Imt
+  COMPONENTS Core RIO Tree TreePlayer
   HINTS ${_root_hints}
   PATH_SUFFIXES cmake share/root/cmake lib/cmake/ROOT lib/root/cmake)
 
@@ -32,14 +32,13 @@ if(NOT ROOT_FOUND)
   message(FATAL_ERROR
     "ROOT was not found.\n"
     "Install it with one of:\n"
-    "  conda env create -f environment.yml && conda activate track-analysis\n"
     "  sudo apt install root-system   (Ubuntu/Debian)\n"
     "  brew install root              (macOS)\n"
     "or run 'source <root>/bin/thisroot.sh' and re-run cmake.")
 endif()
 message(STATUS "Using ROOT ${ROOT_VERSION} from ${ROOT_DIR}")
 
-# ---- Rest of the project as before ----
+# ---- Build settings ----
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -47,36 +46,14 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 endif()
 
-# set(ROOT_LIBS
-#   ROOT::Core ROOT::RIO ROOT::Tree ROOT::TreePlayer
-#   ROOT::Hist ROOT::Gpad ROOT::Graf ROOT::Graf3d ROOT::MathCore ROOT::Imt)
-set(ROOT_LIBS
-  ROOT::Core ROOT::RIO ROOT::Tree ROOT::TreePlayer
-  ROOT::Hist ROOT::Gpad ROOT::Graf ROOT::Graf3d ROOT::MathCore ROOT::Imt
-  ROOT::Geom)
-# everything except main.cpp goes into a library
-# file(GLOB LIB_SOURCES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/src/*.cpp)
-# list(FILTER LIB_SOURCES EXCLUDE REGEX ".*/main\\.cpp$")
+# executables end up in <build>/bin
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-file(GLOB LIB_SOURCES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/src/*.cpp)
-list(FILTER LIB_SOURCES EXCLUDE REGEX ".*/(main|export_event)\\.cpp$")
-
-add_library(trackcore STATIC ${LIB_SOURCES})
-target_include_directories(trackcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(trackcore PUBLIC ${ROOT_LIBS})
-target_compile_options(trackcore PRIVATE -Wall -Wextra -Wpedantic)
-
-# ---- Executables 
-add_executable(TrackAnalysis src/main.cpp)
-target_link_libraries(TrackAnalysis PRIVATE trackcore)
-
-add_executable(export_event src/export_event.cpp)
-target_link_libraries(export_event PRIVATE trackcore ${ROOT_LIBS})
-
-# ---- Tests ----
-include(CTest)
-if(BUILD_TESTING)
-  add_executable(analyze_tests tests/test_analyze.cpp)
-  target_link_libraries(analyze_tests PRIVATE trackcore)
-  add_test(NAME analyze_tests COMMAND analyze_tests)
-endif()
+# ---- export_event: ROOT file -> JSON, used by the web event display (see scripts/ and web/) ----
+add_executable(export_event
+  tools/export_event/main.cpp
+  tools/export_event/event_reader.cpp
+  tools/export_event/json_writer.cpp)
+target_include_directories(export_event PRIVATE tools/export_event)
+target_link_libraries(export_event PRIVATE ROOT::Core ROOT::RIO ROOT::Tree ROOT::TreePlayer)
+target_compile_options(export_event PRIVATE -Wall -Wextra -Wpedantic)

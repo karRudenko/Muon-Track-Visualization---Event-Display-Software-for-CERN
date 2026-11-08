@@ -1,0 +1,35 @@
+{
+  "event": 7191,
+  "zRange": [550, 880],
+  "hits": [
+    {"station": 0, "module": 0, "z": 566.575943, "coord": 0.1970279936, "posInModule": 0.2025},
+    {"station": 0, "module": 1, "z": 570.4851881, "coord": -0.05472999821, "posInModule": -0.05625},
+    {"station": 0, "module": 2, "z": 603.8635, "coord": -0.1845, "posInModule": -0.1845},
+    {"station": 0, "module": 3, "z": 605.0965, "coord": 0.0945, "posInModule": 0.0945},
+    {"station": 0, "module": 4, "z": 638.4754234, "coord": 0.1992171935, "posInModule": 0.20475},
+    {"station": 0, "module": 5, "z": 642.3867466, "coord": -0.061297598, "posInModule": -0.063},
+    {"station": 1, "module": 0, "z": 684.1944103, "coord": -1.144951563, "posInModule": -1.17675},
+    {"station": 1, "module": 0, "z": 683.8749039, "coord": 0.2014063934, "posInModule": 0.207},
+    {"station": 1, "module": 1, "z": 687.7379115, "coord": 0.1444871953, "posInModule": 0.1485},
+    {"station": 1, "module": 1, "z": 687.7883052, "coord": -0.06786519778, "posInModule": -0.06975},
+    {"station": 1, "module": 2, "z": 721.1635, "coord": 3.051, "posInModule": 3.051},
+    {"station": 1, "module": 2, "z": 721.1635, "coord": -0.1935, "posInModule": -0.1935},
+    {"station": 1, "module": 3, "z": 722.3965, "coord": -2.484, "posInModule": -2.484},
+    {"station": 1, "module": 3, "z": 722.3965, "coord": 0.0945, "posInModule": 0.0945},
+    {"station": 1, "module": 4, "z": 755.7743844, "coord": 0.2035955933, "posInModule": 0.20925},
+    {"station": 1, "module": 5, "z": 759.6893442, "coord": -0.07224359764, "posInModule": -0.07425},
+    {"station": 2, "module": 0, "z": 801.1733454, "coord": 0.2079739932, "posInModule": 0.21375},
+    {"station": 2, "module": 1, "z": 805.0903833, "coord": -0.0766219975, "posInModule": -0.07875},
+    {"station": 2, "module": 2, "z": 838.4635, "coord": -0.2025, "posInModule": -0.2025},
+    {"station": 2, "module": 3, "z": 839.6965, "coord": 0.0945, "posInModule": 0.0945},
+    {"station": 2, "module": 4, "z": 873.0712673, "coord": 0.2167307929, "posInModule": 0.22275},
+    {"station": 2, "module": 5, "z": 876.9919419, "coord": -0.08318959728, "posInModule": -0.0855}
+  ],
+  "tracks": [
+    {"p1": [0.1964666448, -0.05342573569, 550], "p2": [0.2063742411, -0.08344691951, 880]},
+    {"p1": [0.197396865, -0.0594923296, 550], "p2": [0.2075198802, -0.07956949779, 880]},
+    {"p1": [0.177254339, -0.0529149651, 550], "p2": [0.217321728, -0.08316957762, 880]}
+  ],
+  "vertices": [
+  ]
+}
