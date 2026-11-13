@@ -53,8 +53,8 @@ The page chooses the mode automatically.
 ## Quick start
 
 ```bash
-pip install -r requirements.txt     # pyyaml
-make all                            # builds build/bin/export_event (needs ROOT)
+pip install -r requirements.txt 
+make all                          
 make serve ROOT_FILE=simple_output.root
 # open http://localhost:8000
 ```
