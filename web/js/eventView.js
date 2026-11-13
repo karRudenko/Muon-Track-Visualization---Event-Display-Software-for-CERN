@@ -3,13 +3,20 @@
 import * as THREE from "three";
 import { COLORS, DEG, TRACK_COLOR, VERTEX_COLOR } from "./config.js";
 import { clearGroup } from "./scene.js";
+import { trackExtent } from "./trackExtent.js";
 
 function tube(a, b, radius, color) {
   const geom = new THREE.TubeGeometry(new THREE.LineCurve3(a, b), 1, radius, 8, false);
   return new THREE.Mesh(geom, new THREE.MeshBasicMaterial({ color }));
 }
+ 
 
-// Throws if `ev` does not look like an exported event.
+function pointAt(t, z) {
+  const [x1, y1, z1] = t.p1, [x2, y2, z2] = t.p2;
+  const f = (z - z1) / (z2 - z1);
+  return new THREE.Vector3(x1 + (x2 - x1) * f, y1 + (y2 - y1) * f, z);
+}
+
 export function assertEvent(ev) {
   for (const key of ["hits", "tracks", "vertices"]) {
     if (!Array.isArray(ev?.[key])) throw new Error(`not an event file: missing "${key}" array`);
@@ -23,22 +30,26 @@ export function drawEvent(layers, ev, geometry) {
   clearGroup(layers.tracks);
   clearGroup(layers.vertices);
 
-  // Each hit is ONE measurement (a strip): a segment across the measurement direction at the hit's z.
+  // Each hit: a segment across the measurement direction at the hit's z.
   let skipped = 0;
   for (const h of ev.hits) {
     const m = geometry[h.station]?.modules[h.module];
     if (!m) { skipped++; continue; }
     const phi = m.angle * DEG, half = m.sizeAlongStrips / 2, c = h.coord;
-    const mx = Math.cos(phi), my = Math.sin(phi);     // measurement direction
-    const sx = -Math.sin(phi), sy = Math.cos(phi);    // direction along the strips
+    const mx = Math.cos(phi), my = Math.sin(phi);
+    const sx = -Math.sin(phi), sy = Math.cos(phi);
     layers.hits.add(tube(
       new THREE.Vector3(c * mx - half * sx, c * my - half * sy, h.z),
       new THREE.Vector3(c * mx + half * sx, c * my + half * sy, h.z),
       0.04, COLORS[m.projection]));
   }
 
+  // a track is drawn only between its first and last hit; a new track starts at its vertex
   for (const t of ev.tracks) {
-    layers.tracks.add(tube(new THREE.Vector3(...t.p1), new THREE.Vector3(...t.p2), 0.05, TRACK_COLOR));
+    const ext = trackExtent(t, ev.hits, geometry, ev.vertices);
+    const a = ext ? pointAt(t, ext.zStart) : new THREE.Vector3(...t.p1);
+    const b = ext ? pointAt(t, ext.zEnd) : new THREE.Vector3(...t.p2);
+    layers.tracks.add(tube(a, b, 0.05, TRACK_COLOR));
   }
 
   for (const v of ev.vertices) {

@@ -1,0 +1,39 @@
+{
+  "event": 52645,
+  "zRange": [550, 880],
+  "hits": [
+    {"station": 0, "module": 0, "z": 567.0429937, "coord": -1.771062742, "posInModule": -1.82025},
+    {"station": 0, "module": 1, "z": 571.0265306, "coord": -2.335876324, "posInModule": -2.40075},
+    {"station": 0, "module": 2, "z": 603.8635, "coord": -0.3375, "posInModule": -0.3375},
+    {"station": 0, "module": 3, "z": 605.0965, "coord": -2.8755, "posInModule": -2.8755},
+    {"station": 0, "module": 4, "z": 638.9549428, "coord": -1.82141434, "posInModule": -1.872},
+    {"station": 0, "module": 5, "z": 642.8958787, "coord": -2.206713528, "posInModule": -2.268},
+    {"station": 1, "module": 0, "z": 684.3632551, "coord": -1.856441539, "posInModule": -1.908},
+    {"station": 1, "module": 0, "z": 684.1149233, "coord": -0.8100039735, "posInModule": -0.8325},
+    {"station": 1, "module": 1, "z": 688.2766564, "coord": -2.125713131, "posInModule": -2.18475},
+    {"station": 1, "module": 1, "z": 688.0662498, "coord": -1.23908716, "posInModule": -1.2735},
+    {"station": 1, "module": 2, "z": 721.1635, "coord": -0.738, "posInModule": -0.738},
+    {"station": 1, "module": 2, "z": 721.1635, "coord": -0.1215, "posInModule": -0.1215},
+    {"station": 1, "module": 3, "z": 722.3965, "coord": -2.7945, "posInModule": -2.7945},
+    {"station": 1, "module": 3, "z": 722.3965, "coord": 0.774, "posInModule": 0.774},
+    {"station": 1, "module": 4, "z": 755.119786, "coord": 2.961987503, "posInModule": 3.04425},
+    {"station": 1, "module": 4, "z": 756.2783213, "coord": -1.919928337, "posInModule": -1.97325},
+    {"station": 1, "module": 5, "z": 759.3760722, "coord": 1.247843959, "posInModule": 1.2825},
+    {"station": 1, "module": 5, "z": 760.1465241, "coord": -1.998739535, "posInModule": -2.05425},
+    {"station": 2, "module": 0, "z": 801.6876727, "coord": -1.959333936, "posInModule": -2.01375},
+    {"station": 2, "module": 1, "z": 805.5273017, "coord": -1.917739137, "posInModule": -1.971},
+    {"station": 2, "module": 2, "z": 838.4635, "coord": 0.0945, "posInModule": 0.0945},
+    {"station": 2, "module": 3, "z": 839.6965, "coord": -2.7225, "posInModule": -2.7225},
+    {"station": 2, "module": 4, "z": 873.6022193, "coord": -2.020631534, "posInModule": -2.07675},
+    {"station": 2, "module": 5, "z": 877.3982085, "coord": -1.795143941, "posInModule": -1.845}
+  ],
+  "tracks": [
+    {"p1": [-1.759009802, -2.373244006, 550], "p2": [-1.989922211, -1.780297996, 880]},
+    {"p1": [-1.737973592, -2.369421129, 550], "p2": [-2.029322428, -1.786603319, 880]},
+    {"p1": [-7.943138058, -6.047018086, 550], "p2": [9.57733482, 5.458328162, 880]},
+    {"p1": [-1.744916939, -2.353249333, 550], "p2": [-2.026258105, -1.790460743, 880]}
+  ],
+  "vertices": [
+    {"pos": [-1.841596545, -2.164738526, 662.9654662], "station": 1, "muonTheta": 0.000185226262, "electronTheta": 0.06259998875}
+  ]
+}

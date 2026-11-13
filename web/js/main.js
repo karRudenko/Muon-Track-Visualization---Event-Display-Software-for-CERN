@@ -1,5 +1,3 @@
-// Wires everything together
-
 import { createViewer } from "./scene.js";
 import { drawGeometry } from "./detector.js";
 import { drawEvent, summarize } from "./eventView.js";
@@ -76,7 +74,7 @@ async function init() {
     ui.setInfo(`Could not load data:\n${e.message}\n${STARTUP_HELP}`, true);
     return;
   }
-  viewer.setZCenter(drawGeometry(viewer.layers.geometry, geometry));
+  viewer.setZCenter(drawGeometry(viewer.layers, geometry));
   ui.setCatalog(source.catalog);
 
   if (source.catalog.size === 0) {

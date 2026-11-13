@@ -28,7 +28,8 @@ export function createViewer(container) {
   const world = new THREE.Group();
   scene.add(world);
   const layers = {
-    geometry: new THREE.Group(),
+    modules: new THREE.Group(),
+    targets: new THREE.Group(),
     hits: new THREE.Group(),
     tracks: new THREE.Group(),
     vertices: new THREE.Group(),

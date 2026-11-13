@@ -1,0 +1,33 @@
+{
+  "event": 38615,
+  "zRange": [550, 880],
+  "hits": [
+    {"station": 0, "module": 0, "z": 566.4476209, "coord": 0.7377603759, "posInModule": 0.75825},
+    {"station": 0, "module": 1, "z": 570.9693831, "coord": -2.095064332, "posInModule": -2.15325},
+    {"station": 0, "module": 2, "z": 603.8635, "coord": -1.9755, "posInModule": -1.9755},
+    {"station": 0, "module": 3, "z": 605.0965, "coord": -0.9135, "posInModule": -0.9135},
+    {"station": 0, "module": 4, "z": 638.3439842, "coord": 0.7530847754, "posInModule": 0.774},
+    {"station": 0, "module": 5, "z": 642.8418484, "coord": -1.979036735, "posInModule": -2.034},
+    {"station": 1, "module": 0, "z": 683.7413866, "coord": 0.764030775, "posInModule": 0.78525},
+    {"station": 1, "module": 0, "z": 683.6244941, "coord": 1.256600759, "posInModule": 1.2915},
+    {"station": 1, "module": 1, "z": 688.5452495, "coord": -3.257529494, "posInModule": -3.348},
+    {"station": 1, "module": 1, "z": 688.2247041, "coord": -1.906793138, "posInModule": -1.95975},
+    {"station": 1, "module": 2, "z": 721.1635, "coord": -1.8585, "posInModule": -1.8585},
+    {"station": 1, "module": 3, "z": 722.3965, "coord": -0.7605, "posInModule": -0.7605},
+    {"station": 1, "module": 4, "z": 755.63775, "coord": 0.7793551745, "posInModule": 0.801},
+    {"station": 1, "module": 5, "z": 760.0956109, "coord": -1.784197942, "posInModule": -1.83375},
+    {"station": 2, "module": 0, "z": 801.0351524, "coord": 0.7903011742, "posInModule": 0.81225},
+    {"station": 2, "module": 1, "z": 805.4774276, "coord": -1.707575944, "posInModule": -1.755},
+    {"station": 2, "module": 2, "z": 838.4635, "coord": -1.7325, "posInModule": -1.7325},
+    {"station": 2, "module": 3, "z": 839.6965, "coord": -0.6075, "posInModule": -0.6075},
+    {"station": 2, "module": 4, "z": 872.9315157, "coord": 0.8056255737, "posInModule": 0.828},
+    {"station": 2, "module": 5, "z": 877.3498929, "coord": -1.591548348, "posInModule": -1.63575}
+  ],
+  "tracks": [
+    {"p1": [0.734596178, -2.129125456, 550], "p2": [0.8051969529, -1.596262883, 880]},
+    {"p1": [0.7357260953, -2.142873372, 550], "p2": [0.8062580751, -1.579842234, 880]},
+    {"p1": [0.7366881928, -2.120131564, 550], "p2": [0.8067263242, -1.587405816, 880]}
+  ],
+  "vertices": [
+  ]
+}
