@@ -15,7 +15,7 @@ async function fetchJson(url) {
   return r.json();
 }
 
-// The set of event numbers the user can pick from: either 0..n-1 (live) or an explicit list (static).
+// The set of event numbers the user can pick from.
 export class EventCatalog {
   #n; #ids;
 

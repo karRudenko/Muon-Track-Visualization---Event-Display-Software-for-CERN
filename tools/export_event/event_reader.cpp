@@ -53,7 +53,7 @@ Event readEvent(const std::string& rootFile, long long event) {
     TTreeReaderArray<int> hSt (reader, "ReconstructedHits.StationID");
     TTreeReaderArray<int> hMod (reader, "ReconstructedHits.ModuleID");
 
-    // reconstructed tracks: straight line through (x0, y0, z0) with slopes
+    // reconstructed tracks: straight line through with slopes
     TTreeReaderArray<double> tX0(reader, "ReconstructedTracks.X0");
     TTreeReaderArray<double> tXS(reader, "ReconstructedTracks.XSlope");
     TTreeReaderArray<double> tY0(reader, "ReconstructedTracks.Y0");
